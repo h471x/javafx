@@ -43,7 +43,7 @@ public class FlightBookController {
         String prenom = prenomField.getText();
 
         // Validate input (e.g., check if fields are empty)
-        if (flightNum.isEmpty() || nom.isEmpty() || prenom.isEmpty() ) {
+        if (flightNum.isEmpty() || nom.isEmpty() || prenom.isEmpty()) {
             statusLabel.setText("Tous les champs doivent être remplis.");
             return;
         }
@@ -54,15 +54,17 @@ public class FlightBookController {
     }
 
     private String insertPassenger(String flightNum, String nom, String prenom) {
-        String sql = "INSERT INTO prendre (NumPssrt, PassNom, PassPrenom) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO prendre (NumPssrt, NumVol) VALUES (" +
+                     "(SELECT NumPssrt FROM passager WHERE PassNom = ? AND PassPrenom = ?), " +
+                     "(SELECT NumVol FROM vol WHERE NumVol = ?))";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             // Set parameters for the SQL query
-            statement.setString(1, flightNum);
-            statement.setString(2, nom);
-            statement.setString(3, prenom);
+            statement.setString(1, nom);
+            statement.setString(2, prenom);
+            statement.setString(3, flightNum);
 
             // Execute the query
             int rowsInserted = statement.executeUpdate();
