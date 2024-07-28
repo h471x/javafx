@@ -21,7 +21,7 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     try {
-      Parent root = FXMLLoader.load(getClass().getResource("/views/addPassenger.fxml"));
+      Parent root = FXMLLoader.load(getClass().getResource("/views/addFlight.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
       primaryStage.setTitle("Ajouter un passager");
@@ -42,7 +42,7 @@ public class Main extends Application {
     if (connection != null) {
       createDatabaseSchema("config/database/database.sql");
       createDatabaseSchema("config/database/tables.sql");
-      createDatabaseSchema("config/database/seed.sql");
+      // createDatabaseSchema("config/database/seed.sql");
     } else {
       System.out.println("Database connection initialization failed.");
     }

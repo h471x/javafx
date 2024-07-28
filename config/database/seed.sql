@@ -42,7 +42,7 @@ INSERT IGNORE INTO passager (
   PassNom,
   PassPrenom,
   Naissance,
-  Iste,
+  Ist,
   Notam
 ) VALUES (
   '0193486323', 'Gates', 'Bill', '1955-10-28', TRUE, FALSE
