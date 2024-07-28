@@ -40,9 +40,9 @@ public class Main extends Application {
   public static void main(String[] args) {
     connection = initializeDatabase();
     if (connection != null) {
-      createDatabaseSchema("config/database/database.sql");
-      createDatabaseSchema("config/database/tables.sql");
-      // createDatabaseSchema("config/database/seed.sql");
+      createDatabaseSchema("config/database/sql/database.sql");
+      createDatabaseSchema("config/database/sql/tables.sql");
+      // createDatabaseSchema("config/database/sql/seed.sql");
     } else {
       System.out.println("Database connection initialization failed.");
     }
