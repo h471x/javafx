@@ -39,12 +39,18 @@ public class Main extends Application {
 
   public static void main(String[] args) {
     connection = initializeDatabase();
-    createDatabaseSchema();
+    if (connection != null) {
+      createDatabaseSchema("config/database/database.sql");
+      createDatabaseSchema("config/database/tables.sql");
+      createDatabaseSchema("config/database/seed.sql");
+    } else {
+      System.out.println("Database connection initialization failed.");
+    }
     launch(args);
   }
 
   private static Connection initializeDatabase() {
-    String url = "jdbc:mysql://localhost:3306/";
+    String url = "jdbc:mysql://localhost:3306/airport";
     String user = "root";
     String password = "";
 
@@ -57,7 +63,6 @@ public class Main extends Application {
       // Establish the connection
       connection = DriverManager.getConnection(url, user, password);
       System.out.println("Database connected successfully!");
-
     } catch (ClassNotFoundException e) {
       System.out.println("MySQL JDBC Driver not found.");
       e.printStackTrace();
@@ -81,9 +86,7 @@ public class Main extends Application {
     }
   }
 
-  private static void createDatabaseSchema() {
-    String sqlScriptPath = "config/database/database.sql";
-
+  private static void createDatabaseSchema(String sqlScriptPath) {
     try (BufferedReader br = new BufferedReader(new FileReader(sqlScriptPath));
       Statement stmt = connection.createStatement()) {
 
@@ -91,17 +94,29 @@ public class Main extends Application {
       StringBuilder sql = new StringBuilder();
 
       while ((line = br.readLine()) != null) {
-        sql.append(line).append("\n");
-      }
-
-      String[] sqlCommands = sql.toString().split(";");
-
-      for (String command : sqlCommands) {
-        if (!command.trim().isEmpty()) {
-          stmt.execute(command.trim());
+        line = line.trim();
+        if (line.startsWith("--") || line.startsWith("/*") || line.endsWith("*/") || line.isEmpty()) {
+          // Skip comment lines and empty lines
+          continue;
+        }
+        sql.append(line).append(" ");
+        // If the line contains a semicolon, it's the end of an SQL statement
+        if (line.endsWith(";")) {
+          String command = sql.toString().trim();
+          if (!command.isEmpty()) {
+            try {
+              // System.out.println("Executing: " + command);
+              stmt.execute(command);
+            } catch (SQLException e) {
+              System.out.println("Error executing: " + command);
+              System.out.println("Error message: " + e.getMessage());
+              e.printStackTrace();
+            }
+            sql.setLength(0); // Reset the StringBuilder for the next statement
+          }
         }
       }
-      System.out.println("Database schema created successfully.");
+      System.out.println("Database schema created from " + sqlScriptPath + " successfully.");
     } catch (IOException | SQLException e) {
       e.printStackTrace();
     }
