@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the JavaFX and MySQL Connector library paths
-JAVAFX_PATH="libs/javafx"
+JAVAFX_PATH="libs/javafx/linux"
 DBCONNECTOR_PATH="libs/dbconnector/mysql-connector.jar"
 MODULES="javafx.controls,javafx.fxml"
 

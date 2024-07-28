@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 rem Set the JavaFX and MySQL Connector library paths
-set "JAVAFX_PATH=libs\javafx"
+set "JAVAFX_PATH=libs\javafx\windows"
 set "DBCONNECTOR_PATH=libs\dbconnector\mysql-connector.jar"
 set "MODULES=javafx.controls,javafx.fxml"
 
