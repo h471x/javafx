@@ -21,7 +21,7 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     try {
-      Parent root = FXMLLoader.load(getClass().getResource("/views/bookFlight.fxml"));
+      Parent root = FXMLLoader.load(getClass().getResource("/views/dashboard.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
       primaryStage.setTitle("Ajouter un passager");
