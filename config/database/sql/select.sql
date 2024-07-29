@@ -10,6 +10,6 @@
  SELECT NumPssrt AS Passeport,PassNom AS Nom ,PassPrenom AS Prenom ,Naissance AS "Date de naissance" FROM passager WHERE Notam=FALSE AND Iste=FALSE ORDER BY PassNom;
 
  --Select Vol --
-SELECT NumVol AS Numero,Origine AS Provenance,Destination AS Destinatioin ,Avion AS Avion,DATE_FORMAT(Decolage, '%Y-%m-%d %H:%i:%s') AS Decolage FROM vol WHERE DateVol >= NOW() ORDER BY DateVol ASC;
+SELECT NumVol AS Numero,Origine AS Provenance,Destination AS Destinatioin ,Avion AS Avion,DATE_FORMAT(Decolage, '%Y-%m-%d %H:%i:%s') AS Decolage FROM vol WHERE Decolage >= NOW() ORDER BY Decolage ASC;
 
 
