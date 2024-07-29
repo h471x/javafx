@@ -2,5 +2,6 @@
 
 - Run the app
 ```
-javac Setup.java && java Setup
+javac Setup.java;
+java Setup;
 ```
