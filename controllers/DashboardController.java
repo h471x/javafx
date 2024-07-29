@@ -32,6 +32,16 @@ public class DashboardController {
   }
 
   @FXML
+  private void showNotamPage() {
+    loadPage("pageNotam.fxml");
+  }
+
+  @FXML
+  private void showIstPage() {
+    loadPage("pageIst.fxml");
+  }
+
+  @FXML
   private void showAdminsPage() {
     loadPage("pageAdmins.fxml");
   }
