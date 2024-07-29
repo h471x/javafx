@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="1100.0" stylesheets="@../assets/styles/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.DashboardController">
+<BorderPane prefHeight="500.0" prefWidth="900.0" stylesheets="@../assets/styles/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.DashboardController">
     <!-- Sidebar on the left -->
     <left>
         <VBox prefHeight="600.0" prefWidth="154.0" spacing="10" style="-fx-background-color: #e9e9e9;">
