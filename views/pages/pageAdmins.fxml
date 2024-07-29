@@ -4,6 +4,6 @@
 <?import javafx.scene.control.Label?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml">
-    <Label text="This is Page 1" layoutX="20" layoutY="20"/>
+  <Label text="This is Page 4" layoutX="20" layoutY="20"/>
 </AnchorPane>
 

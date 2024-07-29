@@ -8,42 +8,42 @@ import java.io.IOException;
 
 public class DashboardController {
 
-    @FXML
-    private Pane contentPane;
+  @FXML
+  private Pane contentPane;
 
-    @FXML
-    private void initialize() {
-        showReservationPage(); // Load the default page
-    }
+  @FXML
+  private void initialize() {
+    showReservationPage();
+  }
 
-    @FXML
-    private void showReservationPage() {
-        loadPage("pageReservations.fxml");
-    }
+  @FXML
+  private void showReservationPage() {
+    loadPage("pageReservations.fxml");
+  }
 
-    @FXML
-    private void showVolsPage() {
-        loadPage("pageVols.fxml");
-    }
+  @FXML
+  private void showVolsPage() {
+    loadPage("pageVols.fxml");
+  }
 
-    @FXML
-    private void showPassagersPage() {
-        loadPage("pagePassagers.fxml");
-    }
+  @FXML
+  private void showPassagersPage() {
+    loadPage("pagePassagers.fxml");
+  }
 
-    @FXML
-    private void showAdminsPage() {
-        loadPage("pageAdmins.fxml");
-    }
+  @FXML
+  private void showAdminsPage() {
+    loadPage("pageAdmins.fxml");
+  }
 
-    private void loadPage(String fxmlFile) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/" + fxmlFile));
-            Parent newPage = loader.load();
-            contentPane.getChildren().clear();
-            contentPane.getChildren().add(newPage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+  private void loadPage(String fxmlFile) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/pages/" + fxmlFile));
+      Parent newPage = loader.load();
+      contentPane.getChildren().clear();
+      contentPane.getChildren().add(newPage);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+  }
 }

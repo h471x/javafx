@@ -14,18 +14,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:controller="app.controllers.pages.PassengerController"
-            prefHeight="600.0" prefWidth="800.0" stylesheets="@../assets/styles/bootstrap3.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../../assets/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.windows.FlightBookController">
     <bottom>
-        <Button fx:id="addButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="success" text="Ajouter Passager" BorderPane.alignment="CENTER" onAction="#handleAddButtonAction">
+        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButtonAction" prefHeight="40.0" prefWidth="200.0" styleClass="success" text="Prendre Vol" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
             </BorderPane.margin>
             <graphic>
                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../assets/icons/plus.png" />
+                      <Image url="@../../assets/icons/plus.png" />
                     </image>
                 </ImageView>
             </graphic>
@@ -34,7 +32,7 @@
     <top>
         <VBox alignment="CENTER" style="-fx-background-color: #5bc0de;" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Passagers" textFill="WHITE">
+                <Label text="Réservation Vol" textFill="WHITE">
                     <VBox.margin>
                         <Insets left="30.0" right="30.0" top="30.0" />
                     </VBox.margin>
@@ -66,6 +64,23 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
+                <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="0">
+                    <children>
+                        <Label text="Numéro Vol">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="30.0" right="30.0" />
+                            </HBox.margin>
+                        </Label>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                              <Image url="@../../assets/icons/airplane.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
                 <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                     <children>
                         <Label text="Nom">
@@ -78,7 +93,7 @@
                         </Label>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../assets/icons/user.png" />
+                              <Image url="@../../assets/icons/user.png" />
                             </image>
                         </ImageView>
                     </children>
@@ -95,61 +110,22 @@
                         </Label>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../assets/icons/user.png" />
+                              <Image url="@../../assets/icons/user.png" />
                             </image>
                         </ImageView>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="0">
-                    <children>
-                        <Label text="Numéro Passeport">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                            <HBox.margin>
-                                <Insets left="30.0" right="30.0" />
-                            </HBox.margin>
-                        </Label>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../assets/icons/qrcode.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </HBox>
-                <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="3">
-                    <children>
-                        <Label text="Date de Naissance">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                            <HBox.margin>
-                                <Insets left="30.0" right="30.0" />
-                            </HBox.margin>
-                        </Label>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../assets/icons/rename-box.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </HBox>
+                <TextField fx:id="flightNumField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Identifiant Vol" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0">
+                    <GridPane.margin>
+                        <Insets left="30.0" right="30.0" />
+                    </GridPane.margin>
+                </TextField>
                 <TextField fx:id="nomField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Nom du passager" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="30.0" right="30.0" />
                     </GridPane.margin>
                 </TextField>
                 <TextField fx:id="prenomField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Prénom du passager" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets left="30.0" right="30.0" />
-                    </GridPane.margin>
-                </TextField>
-                <TextField fx:id="passportNumField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Passeport" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0">
-                    <GridPane.margin>
-                        <Insets left="30.0" right="30.0" />
-                    </GridPane.margin>
-                </TextField>
-                <TextField fx:id="birthField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Naissance passager" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                     <GridPane.margin>
                         <Insets left="30.0" right="30.0" />
                     </GridPane.margin>

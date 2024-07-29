@@ -1,4 +1,4 @@
-package app.controllers.pages;
+package app.controllers.windows;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

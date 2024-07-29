@@ -12,7 +12,7 @@
 <BorderPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.DashboardController">
     <!-- Sidebar on the left -->
     <left>
-        <VBox prefHeight="600.0" prefWidth="154.0" spacing="10">
+        <VBox prefHeight="600.0" prefWidth="154.0" spacing="10" style="-fx-background-color: #e9e9e9;">
             <Button onAction="#showReservationPage" prefHeight="50.0" prefWidth="166.0" style="-fx-background-color: transparent;" styleClass="sidebar-button" text="Réservations">
             <font>
                <Font size="16.0" />
