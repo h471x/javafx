@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:controller="app.controllers.windows.IstController"
+  prefHeight="600.0" prefWidth="800.0" stylesheets="@../../assets/styles/bootstrap3.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <bottom>
+        <Button fx:id="addButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="success" text="Ajouter Vol" BorderPane.alignment="CENTER" onAction="#handleAddButtonAction">
+            <BorderPane.margin>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
+            </BorderPane.margin>
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                      <Image url="@../../assets/icons/plus.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </bottom>
+    <top>
+        <VBox alignment="CENTER" style="-fx-background-color: #5bc0de;" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Nouveau Vol" textFill="WHITE">
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="30.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font size="48.0" />
+                    </font>
+                </Label>
+                <Label fx:id="statusLabel" textFill="WHITE">
+                    <VBox.margin>
+                        <Insets bottom="20.0" left="30.0" right="30.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="0">
+                    <children>
+                        <Label text="Lieu de Départ">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="30.0" right="30.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+                <TextField fx:id="departureField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Région d'aéroport origine" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0">
+                    <GridPane.margin>
+                        <Insets left="30.0" right="30.0" />
+                    </GridPane.margin>
+                </TextField>
+                <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
+                    <children>
+                        <Label text="Destination">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="30.0" right="30.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+                <TextField fx:id="destinationField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Région d'aéroport d'arrivée" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets left="30.0" right="30.0" />
+                    </GridPane.margin>
+                </TextField>
+                <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2">
+                    <children>
+                        <Label text="Nom Avion">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="30.0" right="30.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+                <TextField fx:id="airplaneField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Identification d'avion" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets left="30.0" right="30.0" />
+                    </GridPane.margin>
+                </TextField>
+                <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="3">
+                    <children>
+                        <Label text="Décollage">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="30.0" right="30.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+                <TextField fx:id="departureTimeField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Date et Heure de départ" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                    <GridPane.margin>
+                        <Insets left="30.0" right="30.0" />
+                    </GridPane.margin>
+                </TextField>
+            </children>
+        </GridPane>
+    </center>
+</BorderPane>
