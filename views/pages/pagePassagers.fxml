@@ -7,12 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 
 <AnchorPane prefHeight="497.0" prefWidth="724.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.pages.PassengerPageController">
-    <HBox alignment="CENTER_RIGHT" layoutX="10" layoutY="10" spacing="10">
-        <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="393.0" promptText="Rechercher..." />
-    </HBox>
+    <HBox alignment="CENTER_RIGHT" layoutX="10" layoutY="10" spacing="10" />
     
-    <Button layoutX="417.0" layoutY="11.0" onAction="#search" text="Rechercher" />
-    <Button layoutX="558.0" layoutY="8.0" mnemonicParsing="false" onAction="#addPassenger" prefHeight="32.0" prefWidth="132.0" text="Nouveau Passager" />
+    <Button layoutX="315.0" layoutY="27.0" onAction="#search" text="Rechercher" />
+    <Button layoutX="397.0" layoutY="27.0" mnemonicParsing="false" onAction="#addPassenger" prefHeight="25.0" prefWidth="115.0" text="Nouveau Passager" />
 
     <TableView fx:id="passengersTableView" layoutX="10" layoutY="60" prefHeight="400.0" prefWidth="704.0" />
+     <TextField fx:id="searchTextField" layoutX="4.0" layoutY="25.0" prefHeight="25.0" prefWidth="301.0" promptText="Rechercher..." />
+   <Button layoutX="520.0" layoutY="27.0" onAction="#search" text="Modifier" />
+   <Button layoutX="610.0" layoutY="27.0" onAction="#search" text="Supprimer" />
 </AnchorPane>

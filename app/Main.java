@@ -42,7 +42,7 @@ public class Main extends Application {
     if (connection != null) {
       createDatabaseSchema("config/database/sql/database.sql");
       createDatabaseSchema("config/database/sql/tables.sql");
-      // createDatabaseSchema("config/database/sql/seed.sql");
+      createDatabaseSchema("config/database/sql/seed.sql");
     } else {
       System.out.println("Database connection initialization failed.");
     }
