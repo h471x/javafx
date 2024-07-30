@@ -1,5 +1,5 @@
 ---FOR ADMIN TABLE ---
-INSERT INTO admin (
+INSERT IGNORE INTO admin (
   AdmnNom,
   AdmnPrenom,
   UserName,
@@ -9,7 +9,7 @@ INSERT INTO admin (
 );
 
 --  FOR VOL TABLE --
-INSERT INTO vol (
+INSERT IGNORE INTO vol (
   Avion,
   Origine,
   Destination,
@@ -18,7 +18,7 @@ INSERT INTO vol (
   'Boeing 737', 'Paris', 'New York', '2024-08-30 19:10:00'
 );
 
-INSERT INTO vol (
+INSERT IGNORE INTO vol (
   Avion,
   Origine,
   Destination,
@@ -27,7 +27,7 @@ INSERT INTO vol (
   'Airbus A380', 'New York', 'Tokyo', '2024-12-15 22:30:00'
 );
 
-INSERT INTO vol (
+INSERT IGNORE INTO vol (
   Avion,
   Origine,
   Destination,
@@ -37,16 +37,29 @@ INSERT INTO vol (
 );
 
 --FOR PASSAGER TABLE --
-INSERT INTO passager (
+INSERT IGNORE INTO passager (
   NumPssrt,
   PassNom,
   PassPrenom,
   Naissance,
+  Ist,
+  Notam
 ) VALUES (
-  '0193486323', 'Gates', 'Bill', '1955-10-28'
+  '0193486323', 'Gates', 'Bill', '1955-10-28', TRUE, FALSE
 );
 
-INSERT INTO passager (
+INSERT IGNORE INTO passager (
+  NumPssrt,
+  PassNom,
+  PassPrenom,
+  Naissance,
+  Ist,
+  Notam
+) VALUES (
+  '0193486313', 'Cook', 'Tim', '1955-10-28', FALSE, TRUE
+);
+
+INSERT IGNORE INTO passager (
   NumPssrt,
   PassNom,
   PassPrenom,
@@ -56,14 +69,14 @@ INSERT INTO passager (
 );
 
 --FOR PRENDRE TABLE --
-INSERT INTO prendre (
+INSERT IGNORE INTO prendre (
   NumPssrt,
   NumVol
 ) VALUES (
   '9193486323', 1
 );
 
-INSERT INTO prendre (
+INSERT IGNORE INTO prendre (
   NumPssrt,
   NumVol
 ) VALUES (

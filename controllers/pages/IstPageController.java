@@ -2,22 +2,17 @@ package app.controllers.pages;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.apache.poi.ss.usermodel.*;
@@ -26,14 +21,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,13 +38,51 @@ public class IstPageController {
     @FXML
     private TableView<Map<String, Object>> istTableView;
 
+    // Column names and widths
+    private static final String[] COLUMN_NAMES = {
+        "Passeport", "Nom", "Prenom", "Date de naissance"
+    };
+
+    private static final double[] COLUMN_WIDTHS = {
+        150, 150, 150, 200
+    };
+
+    private ObservableList<Map<String, Object>> data = FXCollections.observableArrayList();
+
     @FXML
     private void initialize() {
-        // Set the column resize policy to remove the extra empty column
+        // Set the column resize policy
         istTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Initialize columns
+        initializeColumns();
 
         // Load data when the page is displayed
         searchAndDisplayIst("");
+
+        // Add listener to searchTextField to detect changes
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> filterData(newValue));
+    }
+
+    private void initializeColumns() {
+        // Create and add columns only if not already created
+        if (istTableView.getColumns().isEmpty()) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                final String columnName = COLUMN_NAMES[i]; // Effectively final
+
+                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
+                column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(getCellValue(cellData.getValue(), columnName)));
+
+                // Set column width
+                column.setPrefWidth(COLUMN_WIDTHS[i]);
+
+                istTableView.getColumns().add(column);
+            }
+        }
+    }
+
+    private Object getCellValue(Map<String, Object> row, String columnName) {
+        return row.get(columnName);
     }
 
     @FXML
@@ -68,47 +99,55 @@ public class IstPageController {
 
         // Query to fetch data based on the search term
         String query = "SELECT NumPssrt AS Passeport, PassNom AS Nom, PassPrenom AS Prenom, Naissance AS `Date de naissance` " +
-                       "FROM passager WHERE Ist=TRUE ORDER BY PassNom";
+                       "FROM passager WHERE Ist=TRUE AND (NumPssrt LIKE ? OR PassNom LIKE ? OR PassPrenom LIKE ?) " +
+                       "ORDER BY PassNom";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
+            // Set parameters for the query
+            String searchPattern = "%" + searchTerm + "%";
+            stmt.setString(1, searchPattern); // For NumPssrt
+            stmt.setString(2, searchPattern); // For PassNom
+            stmt.setString(3, searchPattern); // For PassPrenom
+
             ResultSet rs = stmt.executeQuery();
-            ObservableList<Map<String, Object>> data = FXCollections.observableArrayList();
+            data.clear(); // Clear previous data
 
-            // Clear any existing columns
-            istTableView.getColumns().clear();
-
-            // Get metadata to dynamically create columns
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            for (int i = 1; i <= columnCount; i++) {
-                final String columnName = metaData.getColumnLabel(i);  // Use getColumnLabel to get the alias name
-                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
-                column.setCellValueFactory(cellData -> {
-                    Map<String, Object> row = cellData.getValue();
-                    return new SimpleObjectProperty<>(row.get(columnName));
-                });
-                istTableView.getColumns().add(column);
-            }
-
+            // Update TableView with results
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<>();
-                for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnLabel(i), rs.getObject(i));
+                for (int i = 1; i <= COLUMN_NAMES.length; i++) {
+                    row.put(COLUMN_NAMES[i - 1], rs.getObject(i));
                 }
                 data.add(row);
                 System.out.println("Retrieved record: " + row);  // Debug print
             }
 
-            // Update TableView with results
             istTableView.setItems(data);
             System.out.println("TableView updated with " + data.size() + " records.");  // Debug print
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void filterData(String searchTerm) {
+        // Filter data based on the search term
+        ObservableList<Map<String, Object>> filteredData = FXCollections.observableArrayList();
+        String lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+        for (Map<String, Object> row : data) {
+            boolean matches = row.values().stream()
+                .anyMatch(value -> value != null && value.toString().toLowerCase().contains(lowerCaseSearchTerm));
+
+            if (matches) {
+                filteredData.add(row);
+            }
+        }
+
+        // Update TableView with filtered data
+        istTableView.setItems(filteredData);
     }
 
     @FXML

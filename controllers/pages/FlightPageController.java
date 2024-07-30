@@ -19,7 +19,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,13 +31,44 @@ public class FlightPageController {
     @FXML
     private TableView<Map<String, Object>> flightsTableView;
 
+    private static final String[] COLUMN_NAMES = {
+        "Numero", "Provenance", "Destination", "Avion", "Decolage"
+    };
+
+    private static final double[] COLUMN_WIDTHS = {
+        150, 150, 150, 150, 200
+    };
+
     @FXML
     private void initialize() {
-        // Set the column resize policy to remove the extra empty column
+        // Set the column resize policy
         flightsTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Initialize columns
+        initializeColumns();
 
         // Load data when the page is displayed
         searchAndDisplayFlights("");
+
+        // Add listener to searchTextField to detect changes
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> searchAndDisplayFlights(newValue));
+    }
+
+    private void initializeColumns() {
+        // Create and add columns only if not already created
+        if (flightsTableView.getColumns().isEmpty()) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                final String columnName = COLUMN_NAMES[i];
+
+                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
+                column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().get(columnName)));
+
+                // Set column width
+                column.setPrefWidth(COLUMN_WIDTHS[i]);
+
+                flightsTableView.getColumns().add(column);
+            }
+        }
     }
 
     @FXML
@@ -47,44 +77,37 @@ public class FlightPageController {
         searchAndDisplayFlights(searchTerm);
     }
 
+    
     private void searchAndDisplayFlights(String searchTerm) {
         // Database connection details
         String url = "jdbc:mysql://localhost:3306/airport";
         String user = "root";
         String password = "";
 
-        // Adjust the query based on whether the searchTerm is empty
+        // SQL query with conditions for each column
         String query = "SELECT NumVol AS Numero, Origine AS Provenance, Destination AS Destination, " +
-                       "Avion AS Avion, DATE_FORMAT(Decolage, '%Y-%m-%d %H:%i:%s') AS Decolage " +
-                       "FROM vol WHERE Decolage >= NOW() ORDER BY Decolage ASC";
+                      "Avion AS Avion, DATE_FORMAT(Decolage, '%Y-%m-%d %H:%i:%s') AS Decolage " +
+                      "FROM vol WHERE Decolage >= NOW() " +
+                      "AND (NumVol LIKE ? OR Origine LIKE ? OR Destination LIKE ? OR Avion LIKE ?) " +
+                      "ORDER BY Decolage ASC";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            // Set parameters for the query
+            String searchPattern = "%" + searchTerm + "%";
+            stmt.setString(1, searchPattern); // For NumVol
+            stmt.setString(2, searchPattern); // For Origine
+            stmt.setString(3, searchPattern); // For Destination
+            stmt.setString(4, searchPattern); // For Avion
 
             ResultSet rs = stmt.executeQuery();
             ObservableList<Map<String, Object>> data = FXCollections.observableArrayList();
 
-            // Clear any existing columns
-            flightsTableView.getColumns().clear();
-
-            // Get metadata to dynamically create columns
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            for (int i = 1; i <= columnCount; i++) {
-                final String columnName = metaData.getColumnLabel(i);  // Use getColumnLabel to get the alias name
-                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
-                column.setCellValueFactory(cellData -> {
-                    Map<String, Object> row = cellData.getValue();
-                    return new SimpleObjectProperty<>(row.get(columnName));
-                });
-                flightsTableView.getColumns().add(column);
-            }
-
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<>();
-                for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnLabel(i), rs.getObject(i));
+                for (String columnName : COLUMN_NAMES) {
+                    row.put(columnName, rs.getObject(columnName));
                 }
                 data.add(row);
                 System.out.println("Retrieved record: " + row);  // Debug print

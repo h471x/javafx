@@ -32,13 +32,49 @@ public class PassengerPageController {
     @FXML
     private TableView<Map<String, Object>> passengersTableView;
 
+    // Column names and widths
+    private static final String[] COLUMN_NAMES = {
+        "Passeport", "Nom", "Prenom", "Date de naissance"
+    };
+
+    private static final double[] COLUMN_WIDTHS = {
+        150, 150, 150, 200
+    };
+
     @FXML
     private void initialize() {
-        // Set the column resize policy to remove the extra empty column
+        // Set the column resize policy
         passengersTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Initialize columns
+        initializeColumns();
 
         // Load data when the page is displayed
         searchAndDisplayPassengers("");
+
+        // Add listener to searchTextField to detect changes
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> searchAndDisplayPassengers(newValue));
+    }
+
+    private void initializeColumns() {
+        // Create and add columns only if not already created
+        if (passengersTableView.getColumns().isEmpty()) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                final String columnName = COLUMN_NAMES[i]; // Effectively final
+
+                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
+                column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(getCellValue(cellData.getValue(), columnName)));
+
+                // Set column width
+                column.setPrefWidth(COLUMN_WIDTHS[i]);
+
+                passengersTableView.getColumns().add(column);
+            }
+        }
+    }
+
+    private Object getCellValue(Map<String, Object> row, String columnName) {
+        return row.get(columnName);
     }
 
     @FXML
@@ -55,41 +91,32 @@ public class PassengerPageController {
 
         // Query to fetch data based on the search term
         String query = "SELECT NumPssrt AS Passeport, PassNom AS Nom, PassPrenom AS Prenom, Naissance AS `Date de naissance` " +
-                       "FROM passager WHERE Notam=FALSE AND Ist=FALSE ORDER BY PassNom";
+                       "FROM passager WHERE Notam=FALSE AND Ist=FALSE " +
+                       "AND (NumPssrt LIKE ? OR PassNom LIKE ? OR PassPrenom LIKE ?) " +
+                       "ORDER BY PassNom";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
+            // Set parameters for the query
+            String searchPattern = "%" + searchTerm + "%";
+            stmt.setString(1, searchPattern); // For NumPssrt
+            stmt.setString(2, searchPattern); // For PassNom
+            stmt.setString(3, searchPattern); // For PassPrenom
+
             ResultSet rs = stmt.executeQuery();
             ObservableList<Map<String, Object>> data = FXCollections.observableArrayList();
 
-            // Clear any existing columns
-            passengersTableView.getColumns().clear();
-
-            // Get metadata to dynamically create columns
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            for (int i = 1; i <= columnCount; i++) {
-                final String columnName = metaData.getColumnLabel(i);  // Use getColumnLabel to get the alias name
-                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
-                column.setCellValueFactory(cellData -> {
-                    Map<String, Object> row = cellData.getValue();
-                    return new SimpleObjectProperty<>(row.get(columnName));
-                });
-                passengersTableView.getColumns().add(column);
-            }
-
+            // Update TableView with results
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<>();
-                for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnLabel(i), rs.getObject(i));
+                for (int i = 1; i <= COLUMN_NAMES.length; i++) {
+                    row.put(COLUMN_NAMES[i - 1], rs.getObject(i));
                 }
                 data.add(row);
                 System.out.println("Retrieved record: " + row);  // Debug print
             }
 
-            // Update TableView with results
             passengersTableView.setItems(data);
             System.out.println("TableView updated with " + data.size() + " records.");  // Debug print
 

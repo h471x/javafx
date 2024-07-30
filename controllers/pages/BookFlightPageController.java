@@ -19,10 +19,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 public class BookFlightPageController {
 
@@ -32,13 +34,48 @@ public class BookFlightPageController {
     @FXML
     private TableView<Map<String, Object>> resultsTableView;
 
+    private static final String[] COLUMN_NAMES = {
+        "Numero du vol", "Provenance", "Destination", "Decolage", "Nombre de passager"
+    };
+
+    private static final double[] COLUMN_WIDTHS = {
+        150, 150, 150, 200, 150
+    };
+
     @FXML
     private void initialize() {
-        // Set the column resize policy to remove the extra empty column
+        // Set the column resize policy
         resultsTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Initialize columns
+        initializeColumns();
 
         // Load data when the page is displayed
         searchAndDisplayData("");
+
+        // Add listener to searchTextField to detect changes
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> searchAndDisplayData(newValue));
+    }
+
+    private void initializeColumns() {
+        // Create and add columns only if not already created
+        if (resultsTableView.getColumns().isEmpty()) {
+            for (int i = 0; i < COLUMN_NAMES.length; i++) {
+                final String columnName = COLUMN_NAMES[i]; // Effectively final
+
+                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
+                column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(getCellValue(cellData.getValue(), columnName)));
+
+                // Set column width
+                column.setPrefWidth(COLUMN_WIDTHS[i]);
+
+                resultsTableView.getColumns().add(column);
+            }
+        }
+    }
+
+    private Object getCellValue(Map<String, Object> row, String columnName) {
+        return row.get(columnName);
     }
 
     @FXML
@@ -53,47 +90,37 @@ public class BookFlightPageController {
         String user = "root";
         String password = "";
 
-        // Adjust the query based on whether the searchTerm is empty
+        // SQL query with conditions for each column
         String query = "SELECT Pr.NumVol AS 'Numero du vol', V.Origine AS Provenance, V.Destination AS Destination, " +
-                       "DATE_FORMAT(V.Decolage, '%Y-%m-%d %H:%i:%s') AS Decolage, COUNT(P.PassNom) AS 'Nombre de passager' " +
-                       "FROM prendre AS Pr " +
-                       "INNER JOIN vol AS V ON Pr.NumVol=V.NumVol AND V.Decolage >=NOW()" +
-                       "INNER JOIN passager AS P ON Pr.NumPssrt=P.NumPssrt " +
-                       "GROUP BY V.NumVol";
+                      "DATE_FORMAT(V.Decolage, '%Y-%m-%d %H:%i:%s') AS Decolage, COUNT(P.PassNom) AS 'Nombre de passager' " +
+                      "FROM prendre AS Pr " +
+                      "INNER JOIN vol AS V ON Pr.NumVol = V.NumVol AND V.Decolage >= NOW() " +
+                      "INNER JOIN passager AS P ON Pr.NumPssrt = P.NumPssrt " +
+                      "WHERE Pr.NumVol LIKE ? OR V.Origine LIKE ? OR V.Destination LIKE ? " +
+                      "GROUP BY V.NumVol";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
+            // Set parameters for the query
+            String searchPattern = "%" + searchTerm + "%";
+            stmt.setString(1, searchPattern); // For Pr.NumVol
+            stmt.setString(2, searchPattern); // For V.Origine
+            stmt.setString(3, searchPattern); // For V.Destination
+
             ResultSet rs = stmt.executeQuery();
             ObservableList<Map<String, Object>> data = FXCollections.observableArrayList();
 
-            // Clear any existing columns
-            resultsTableView.getColumns().clear();
-
-            // Get metadata to dynamically create columns
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            for (int i = 1; i <= columnCount; i++) {
-                final String columnName = metaData.getColumnLabel(i);  // Use getColumnLabel to get the alias name
-                TableColumn<Map<String, Object>, Object> column = new TableColumn<>(columnName);
-                column.setCellValueFactory(cellData -> {
-                    Map<String, Object> row = cellData.getValue();
-                    return new SimpleObjectProperty<>(row.get(columnName));
-                });
-                resultsTableView.getColumns().add(column);
-            }
-
+            // Update TableView with results
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<>();
-                for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnLabel(i), rs.getObject(i));
+                for (int i = 1; i <= COLUMN_NAMES.length; i++) {
+                    row.put(COLUMN_NAMES[i - 1], rs.getObject(i));
                 }
                 data.add(row);
                 System.out.println("Retrieved record: " + row);  // Debug print
             }
 
-            // Update TableView with results
             resultsTableView.setItems(data);
             System.out.println("TableView updated with " + data.size() + " records.");  // Debug print
 
