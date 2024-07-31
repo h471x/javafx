@@ -14,11 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:controller="app.controllers.windows.NotamController"
-  prefHeight="600.0" prefWidth="800.0" stylesheets="@../../assets/styles/bootstrap3.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../../assets/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controllers.windows.NotamController">
     <bottom>
-        <Button fx:id="addButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="success" text="Ajouter Vol" BorderPane.alignment="CENTER" onAction="#handleAddButtonAction">
+        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButtonAction" prefHeight="40.0" prefWidth="200.0" styleClass="success" text="Ajouter comme Notam" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="30.0" left="30.0" right="30.0" top="20.0" />
             </BorderPane.margin>
@@ -34,7 +32,7 @@
     <top>
         <VBox alignment="CENTER" style="-fx-background-color: #5bc0de;" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Nouveau Vol" textFill="WHITE">
+                <Label text="Nouveau Notam" textFill="WHITE">
                     <VBox.margin>
                         <Insets left="30.0" right="30.0" top="30.0" />
                     </VBox.margin>
@@ -68,7 +66,7 @@
             <children>
                 <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="0">
                     <children>
-                        <Label text="Lieu de Départ">
+                        <Label text="Passeport">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -78,14 +76,14 @@
                         </Label>
                     </children>
                 </HBox>
-                <TextField fx:id="departureField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Région d'aéroport origine" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0">
+                <TextField fx:id="departureField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Numéro passeport" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0">
                     <GridPane.margin>
                         <Insets left="30.0" right="30.0" />
                     </GridPane.margin>
                 </TextField>
                 <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                     <children>
-                        <Label text="Destination">
+                        <Label text="Nom">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -95,14 +93,14 @@
                         </Label>
                     </children>
                 </HBox>
-                <TextField fx:id="destinationField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Région d'aéroport d'arrivée" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                <TextField fx:id="destinationField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Nom" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="30.0" right="30.0" />
                     </GridPane.margin>
                 </TextField>
                 <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2">
                     <children>
-                        <Label text="Nom Avion">
+                        <Label text="Prénom">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -112,14 +110,14 @@
                         </Label>
                     </children>
                 </HBox>
-                <TextField fx:id="airplaneField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Identification d'avion" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                <TextField fx:id="airplaneField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Prénom" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets left="30.0" right="30.0" />
                     </GridPane.margin>
                 </TextField>
                 <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="3">
                     <children>
-                        <Label text="Décollage">
+                        <Label text="Naissance">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -129,7 +127,7 @@
                         </Label>
                     </children>
                 </HBox>
-                <TextField fx:id="departureTimeField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Date et Heure de départ" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                <TextField fx:id="departureTimeField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="250.0" promptText="Date de naissance" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                     <GridPane.margin>
                         <Insets left="30.0" right="30.0" />
                     </GridPane.margin>
