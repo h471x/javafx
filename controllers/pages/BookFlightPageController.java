@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -144,4 +146,60 @@ public class BookFlightPageController {
             e.printStackTrace();
         }
     }
+
+  @FXML
+  public void editFlight(ActionEvent event) {
+      // Get the selected row
+      Map<String, Object> selectedRow = resultsTableView.getSelectionModel().getSelectedItem();
+
+      if (selectedRow != null) {
+          // Print the details of the selected row
+          System.out.println("Selected row details:");
+          for (Map.Entry<String, Object> entry : selectedRow.entrySet()) {
+              System.out.println(entry.getKey() + ": " + entry.getValue());
+          }
+
+          try {
+              // Load the FXML file
+              FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/windows/editFlight.fxml"));
+              Parent root = loader.load();
+
+              // Access the UI elements from the loaded FXML
+              // TextField flightNumberField = (TextField) lookupElement(root, "#flightNumComboBox");
+              // TextField departureField = (TextField) lookupElement(root, "#nomField");
+              ComboBox<String> numComboBox = (ComboBox<String>) lookupElement(root, "#flightNumComboBox");
+
+              // Print the values before setting them to UI elements
+              System.out.println("Flight Number: " + selectedRow.get("Numero du vol"));
+              // System.out.println("Departure: " + selectedRow.get("Provenance"));
+
+              // Set values on the UI elements
+              if (numComboBox != null) {
+                  numComboBox.setValue((String) selectedRow.get("Numero du vol"));
+              } else {
+                System.err.println("ComboBox 'flightNumComboBox' is null.");
+              }
+              // if (flightNumberField != null) {
+              //     flightNumberField.setText((String) selectedRow.get("Numero du vol"));
+              // }
+              // if (departureField != null) {
+              //     departureField.setText((String) selectedRow.get("Provenance"));
+              // }
+
+              // Create a new Stage (window)
+              Stage newStage = new Stage();
+              newStage.setScene(new Scene(root));
+              newStage.setTitle("Modifier une réservation");
+              newStage.show();
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+      } else {
+          System.out.println("No row selected. Please select a row to edit.");
+      }
+  }
+
+  private Node lookupElement(Parent root, String fxId) {
+      return root.lookup(fxId);
+  }
 }
